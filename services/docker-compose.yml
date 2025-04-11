@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  user-profile:
+    build:
+      context: ./user-profile
+    ports:
+      - "5001:5000"
+    networks:
+      - api-network
+    environment:
+      - NODE_ENV=production
+
+  health-goal:
+    build:
+      context: ./health-goal
+    ports:
+      - "5002:5000"
+    networks:
+      - api-network
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    image: nginx:alpine
+    container_name: api-gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
